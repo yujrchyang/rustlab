@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "tutorial",
+]
+
+resolver = "2"
