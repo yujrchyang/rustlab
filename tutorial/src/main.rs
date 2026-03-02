@@ -1,5 +1,8 @@
 use clap::Parser;
 
+mod control;
+mod function;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about = "RustLab Tutorial Exercise")]
 struct Args {
@@ -12,6 +15,8 @@ fn main() {
 
     match args.exercise.as_str() {
         "hello" => run_hello(),
+        "func" => function::run_function(),
+        "ctrl" => control::run_control(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
