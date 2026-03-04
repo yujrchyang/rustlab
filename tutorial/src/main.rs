@@ -4,6 +4,7 @@ mod compositetype;
 mod control;
 mod function;
 mod generics;
+mod mtrait;
 mod reference;
 mod slice;
 
@@ -25,6 +26,7 @@ fn main() {
         "slice" => slice::run_slice(),
         "ct" => compositetype::run_compositetype(),
         "gen" => generics::run_generices(),
+        "trait" => mtrait::run_mtrait(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
