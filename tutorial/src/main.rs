@@ -3,6 +3,7 @@ use clap::Parser;
 mod compositetype;
 mod control;
 mod function;
+mod generics;
 mod reference;
 mod slice;
 
@@ -23,6 +24,7 @@ fn main() {
         "ref" => reference::run_reference(),
         "slice" => slice::run_slice(),
         "ct" => compositetype::run_compositetype(),
+        "gen" => generics::run_generices(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
