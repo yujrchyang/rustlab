@@ -1,7 +1,10 @@
 use clap::Parser;
 
+mod compositetype;
 mod control;
 mod function;
+mod reference;
+mod slice;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "RustLab Tutorial Exercise")]
@@ -17,6 +20,9 @@ fn main() {
         "hello" => run_hello(),
         "func" => function::run_function(),
         "ctrl" => control::run_control(),
+        "ref" => reference::run_reference(),
+        "slice" => slice::run_slice(),
+        "ct" => compositetype::run_compositetype(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
