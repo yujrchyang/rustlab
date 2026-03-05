@@ -2,6 +2,7 @@ use clap::Parser;
 
 mod compositetype;
 mod control;
+mod errhandle;
 mod function;
 mod generics;
 mod lifetime;
@@ -29,6 +30,7 @@ fn main() {
         "gen" => generics::run_generices(),
         "trait" => mtrait::run_mtrait(),
         "lifetime" => lifetime::run_lifetime(),
+        "err" => errhandle::run_errhandle(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
