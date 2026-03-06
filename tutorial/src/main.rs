@@ -1,5 +1,6 @@
 use clap::Parser;
 
+mod closure;
 mod compositetype;
 mod control;
 mod errhandle;
@@ -31,6 +32,7 @@ fn main() {
         "trait" => mtrait::run_mtrait(),
         "lifetime" => lifetime::run_lifetime(),
         "err" => errhandle::run_errhandle(),
+        "closure" => closure::run_closure(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
