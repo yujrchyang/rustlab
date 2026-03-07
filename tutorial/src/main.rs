@@ -12,6 +12,7 @@ mod lifetime;
 mod mtrait;
 mod reference;
 mod slice;
+mod smartpointer;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "RustLab Tutorial Exercise")]
@@ -37,6 +38,7 @@ fn main() {
         "closure" => closure::run_closure(),
         "iter" => iterator::run_iterator(),
         "coll" => collection::run_collection(),
+        "spointer" => smartpointer::run_smartpointer(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
