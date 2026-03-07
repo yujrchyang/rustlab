@@ -6,6 +6,7 @@ mod control;
 mod errhandle;
 mod function;
 mod generics;
+mod iterator;
 mod lifetime;
 mod mtrait;
 mod reference;
@@ -33,6 +34,7 @@ fn main() {
         "lifetime" => lifetime::run_lifetime(),
         "err" => errhandle::run_errhandle(),
         "closure" => closure::run_closure(),
+        "iter" => iterator::run_iterator(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
