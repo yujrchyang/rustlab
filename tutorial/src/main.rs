@@ -1,6 +1,7 @@
 use clap::Parser;
 
 mod closure;
+mod collection;
 mod compositetype;
 mod control;
 mod errhandle;
@@ -35,6 +36,7 @@ fn main() {
         "err" => errhandle::run_errhandle(),
         "closure" => closure::run_closure(),
         "iter" => iterator::run_iterator(),
+        "coll" => collection::run_collection(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
