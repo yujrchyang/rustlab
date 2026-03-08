@@ -1,6 +1,6 @@
 [workspace]
 
-members = ["algorithm",
+members = ["algorithm", "bitcask",
     "tutorial",
 ]
 
