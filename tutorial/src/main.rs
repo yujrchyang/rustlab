@@ -3,6 +3,7 @@ use clap::Parser;
 mod closure;
 mod collection;
 mod compositetype;
+mod concurrent;
 mod control;
 mod errhandle;
 mod function;
@@ -39,6 +40,7 @@ fn main() {
         "iter" => iterator::run_iterator(),
         "coll" => collection::run_collection(),
         "spointer" => smartpointer::run_smartpointer(),
+        "concurrent" => concurrent::run_concurrent(),
         // You can add more module matches here later.
         // "ownership" => ownership::run_exercise(),
         _ => {
