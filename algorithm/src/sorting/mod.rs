@@ -1,2 +1,2 @@
 pub mod bubble;
-pub mod insert;
+pub mod insertion;

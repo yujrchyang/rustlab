@@ -1,4 +1,4 @@
-pub fn insert_sort<T: Ord>(arr: &mut Vec<T>) {
+pub fn insertion_sort<T: Ord>(arr: &mut Vec<T>) {
     let size = arr.len();
     if size <= 1 {
         return;
@@ -20,14 +20,14 @@ mod tests {
     #[test]
     fn test_empty_vec() {
         let mut empty_vec: Vec<String> = vec![];
-        insert_sort(&mut empty_vec);
+        insertion_sort(&mut empty_vec);
         assert_eq!(empty_vec, Vec::<String>::new());
     }
 
     #[test]
     fn test_number_vec() {
         let mut num_vec = vec![1, 9, 5, 7, 3];
-        insert_sort(&mut num_vec);
+        insertion_sort(&mut num_vec);
         assert_eq!(num_vec, vec![1, 3, 5, 7, 9]);
     }
 
@@ -40,7 +40,7 @@ mod tests {
             String::from("bob"),
             String::from("carol"),
         ];
-        insert_sort(&mut str_vec);
+        insertion_sort(&mut str_vec);
         assert_eq!(
             str_vec,
             vec![
