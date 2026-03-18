@@ -25,3 +25,9 @@ pub struct LogRecordPos {
     pub(crate) file_id: u32,
     pub(crate) offset: u64,
 }
+
+// 从数据文件中读取的 log_record 信息
+pub struct ReadLogRecord {
+    pub(crate) record: LogRecord,
+    pub(crate) size: u64,
+}
