@@ -1,18 +1,16 @@
 pub fn merge_sort<T>(arr: &mut [T])
 where
-    T: Ord + Clone + Default,
+    T: PartialOrd + Clone + Default,
 {
-    let size = arr.len();
-    if size <= 1 {
+    if arr.len() <= 1 {
         return;
     }
-
-    merge_sort_range(arr, 0, size - 1);
+    return merge_sort_range(arr, 0, arr.len() - 1);
 }
 
 fn merge_sort_range<T>(arr: &mut [T], lo: usize, hi: usize)
 where
-    T: Ord + Clone + Default,
+    T: PartialOrd + Clone + Default,
 {
     if lo < hi {
         let mid = lo + ((hi - lo) >> 1);
@@ -24,13 +22,13 @@ where
 
 fn merge_two_array<T>(arr: &mut [T], lo: usize, mid: usize, hi: usize)
 where
-    T: Ord + Clone + Default,
+    T: PartialOrd + Clone + Default,
 {
     let mut arr1 = arr[lo..=mid].to_vec();
     let mut arr2 = arr[mid + 1..=hi].to_vec();
-
     let mut i = 0;
     let mut j = 0;
+
     while i < arr1.len() && j < arr2.len() {
         if arr1[i] < arr2[j] {
             arr[lo + i + j] = std::mem::take(&mut arr1[i]);
@@ -40,12 +38,10 @@ where
             j += 1;
         }
     }
-
     while i < arr1.len() {
         arr[lo + i + j] = std::mem::take(&mut arr1[i]);
         i += 1;
     }
-
     while j < arr2.len() {
         arr[lo + i + j] = std::mem::take(&mut arr2[j]);
         j += 1;
@@ -65,28 +61,37 @@ mod tests {
 
     #[test]
     fn test_number_vec() {
-        let mut vec = vec![7, 49, 73, 58, 30, 72, 44, 78, 23, 9];
-        merge_sort(&mut vec);
-        assert_eq!(vec, vec![7, 9, 23, 30, 44, 49, 58, 72, 73, 78]);
+        let mut num_vec = vec![1, 9, 5, 7, 3];
+        merge_sort(&mut num_vec);
+        assert_eq!(num_vec, vec![1, 3, 5, 7, 9]);
+    }
+
+    #[test]
+    fn test_float_vec() {
+        let mut num_vec = vec![1.1, 9.9, 5.5, 7.7, 3.3];
+        merge_sort(&mut num_vec);
+        assert_eq!(num_vec, vec![1.1, 3.3, 5.5, 7.7, 9.9]);
     }
 
     #[test]
     fn test_string_vec() {
-        let mut vec = vec![
-            String::from("Bob"),
-            String::from("David"),
-            String::from("Carol"),
-            String::from("Alice"),
+        let mut str_vec = vec![
+            String::from("alice"),
+            String::from("david"),
+            String::from("black"),
+            String::from("bob"),
+            String::from("carol"),
         ];
-        merge_sort(&mut vec);
+        merge_sort(&mut str_vec);
         assert_eq!(
-            vec,
+            str_vec,
             vec![
-                String::from("Alice"),
-                String::from("Bob"),
-                String::from("Carol"),
-                String::from("David"),
+                String::from("alice"),
+                String::from("black"),
+                String::from("bob"),
+                String::from("carol"),
+                String::from("david"),
             ]
-        );
+        )
     }
 }
