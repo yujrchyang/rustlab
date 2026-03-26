@@ -16,7 +16,7 @@ pub struct FileIO {
 }
 
 impl FileIO {
-    fn new(file_path: PathBuf) -> Result<Self> {
+    pub fn new(file_path: PathBuf) -> Result<Self> {
         match OpenOptions::new()
             .create(true)
             .read(true)
