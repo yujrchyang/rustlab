@@ -271,7 +271,7 @@ impl Engine {
                 }
 
                 // 递增 offset
-                offset += size;
+                offset += size as u64;
             }
 
             // 设置当前活跃文件的 offset
