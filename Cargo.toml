@@ -1,7 +1,7 @@
 [workspace]
 
 members = ["algorithm", "bitcask",
-    "tutorial",
+    "tutorial", "zero2prod",
 ]
 
 resolver = "2"
