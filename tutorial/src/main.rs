@@ -1,12 +1,12 @@
 use clap::Parser;
 
+use crate::variable::run_variable;
+
 mod closure;
 mod collection;
-mod compositetype;
 mod concurrent;
 mod control;
 mod errhandle;
-mod function;
 mod generics;
 mod iterator;
 mod lifetime;
@@ -14,6 +14,7 @@ mod mtrait;
 mod reference;
 mod slice;
 mod smartpointer;
+mod variable;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "RustLab Tutorial Exercise")]
@@ -27,11 +28,10 @@ fn main() {
 
     match args.exercise.as_str() {
         "hello" => run_hello(),
-        "func" => function::run_function(),
+        "variable" => run_variable(),
         "ctrl" => control::run_control(),
         "ref" => reference::run_reference(),
         "slice" => slice::run_slice(),
-        "ct" => compositetype::run_compositetype(),
         "gen" => generics::run_generices(),
         "trait" => mtrait::run_mtrait(),
         "lifetime" => lifetime::run_lifetime(),

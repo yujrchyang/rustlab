@@ -404,6 +404,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
 
 [[package]]
+name = "stdext"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4af28eeb7c18ac2dbdb255d40bee63f203120e1db6b0024b177746ebec7049c1"
+
+[[package]]
 name = "strsim"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -445,6 +451,7 @@ name = "tutorial"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "stdext",
 ]
 
 [[package]]
