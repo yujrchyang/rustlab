@@ -1,5 +1,7 @@
 use clap::Parser;
 
+mod basic;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about = "RustLab Tutorial Exercise")]
 struct Args {
@@ -12,6 +14,9 @@ fn main() {
 
     match args.exercise.as_str() {
         "hello" => run_hello(),
+        "var" => basic::variable::run_variable(),
+        "ctrl" => basic::control::run_control(),
+        "composite" => basic::composite::run_composite(),
         _ => {
             eprintln!(
                 "Error: Exercise '{}' not found. Please type --help to see available options.",
