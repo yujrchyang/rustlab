@@ -17,6 +17,7 @@ fn main() {
         "var" => basic::variable::run_variable(),
         "ctrl" => basic::control::run_control(),
         "composite" => basic::composite::run_composite(),
+        "errhandle" => basic::errhandle::run_errhandle(),
         _ => {
             eprintln!(
                 "Error: Exercise '{}' not found. Please type --help to see available options.",
