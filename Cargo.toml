@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "bitcask",
+]
+
+resolver = "2"
