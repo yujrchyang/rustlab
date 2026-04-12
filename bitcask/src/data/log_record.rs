@@ -22,6 +22,12 @@ pub struct LogRecordPos {
     pub(crate) offset: u64,
 }
 
+/// 从数据文件中读取的 log_record 信息，包含其 size
+pub struct ReadLogRecord {
+    pub(crate) record: LogRecord,
+    pub(crate) size: i64,
+}
+
 impl LogRecord {
     pub fn encode(&mut self) -> Vec<u8> {
         todo!()

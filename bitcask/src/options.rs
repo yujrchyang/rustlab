@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
-pub struct options {
+#[derive(Clone)]
+pub struct Options {
     // 数据库目录
     pub dir_path: PathBuf,
 
@@ -9,4 +10,15 @@ pub struct options {
 
     // 是否每次写都持久化
     pub sync_write: bool,
+
+    // 索引类型
+    pub index_type: IndexType,
+}
+
+#[derive(Clone)]
+pub enum IndexType {
+    /// BTree 索引
+    BTree,
+    /// 跳表索引
+    Skiplist,
 }
