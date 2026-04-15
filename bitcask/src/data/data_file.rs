@@ -74,10 +74,10 @@ impl DataFile {
             .read(&mut kv_buf, offset + actual_header_size as u64)?;
 
         // 构造 LogRecord
-        let mut log_record = LogRecord {
+        let log_record = LogRecord {
             key: kv_buf.get(..key_size).unwrap().to_vec(),
             value: kv_buf
-                .get(key_size..kv_buf.len() - CRC_LENGTH + value_size)
+                .get(key_size..kv_buf.len() - CRC_LENGTH)
                 .unwrap()
                 .to_vec(),
             rec_type: LogRecordType::from_u8(rec_type),
@@ -181,5 +181,51 @@ mod tests {
         assert!(sync_res1.is_ok());
 
         fs::remove_file(get_data_file_name(dir_path.clone(), 200)).unwrap();
+    }
+
+    #[test]
+    fn test_data_file_read_log_record() {
+        let dir_path = std::env::temp_dir();
+
+        let data_file_res = DataFile::new(dir_path.clone(), 300);
+        assert!(data_file_res.is_ok());
+        let data_file = data_file_res.unwrap();
+        assert_eq!(data_file.get_file_id(), 300);
+
+        // 先写一条数据
+        let enc1 = LogRecord {
+            key: "name".as_bytes().to_vec(),
+            value: "bitcask".as_bytes().to_vec(),
+            rec_type: LogRecordType::NORMAL,
+        };
+        let res1 = data_file.write(&enc1.encode());
+        assert!(res1.is_ok());
+
+        // 再读出来
+        let read_res1 = data_file.read_log_record(0);
+        assert!(read_res1.is_ok());
+        let read1 = read_res1.unwrap();
+        assert_eq!(read1.record.key, enc1.key);
+        assert_eq!(read1.record.value, enc1.value);
+        assert_eq!(read1.record.rec_type, enc1.rec_type);
+
+        // 写第二条数据
+        let enc2 = LogRecord {
+            key: "name-rs".as_bytes().to_vec(),
+            value: "bitcask-rs".as_bytes().to_vec(),
+            rec_type: LogRecordType::NORMAL,
+        };
+        let res2 = data_file.write(&enc2.encode());
+        assert!(res2.is_ok());
+
+        // 再读出来
+        let read_res2 = data_file.read_log_record(read1.size as u64);
+        assert!(read_res2.is_ok());
+        let read2 = read_res2.unwrap();
+        assert_eq!(read2.record.key, enc2.key);
+        assert_eq!(read2.record.value, enc2.value);
+        assert_eq!(read2.record.rec_type, enc2.rec_type);
+
+        fs::remove_file(get_data_file_name(dir_path.clone(), 300)).unwrap();
     }
 }

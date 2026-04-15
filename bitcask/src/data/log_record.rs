@@ -1,8 +1,9 @@
-use prost::length_delimiter_len;
+use bytes::{BufMut, BytesMut};
+use prost::{encode_length_delimiter, length_delimiter_len};
 
 pub const CRC_LENGTH: usize = 4;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub enum LogRecordType {
     // 正常 put 的数据
     NORMAL = 1,
@@ -43,16 +44,97 @@ pub struct ReadLogRecord {
 }
 
 impl LogRecord {
-    pub fn encode(&mut self) -> Vec<u8> {
-        todo!()
+    /// 对 LogRecord 进行编码，返回字节数组及长度
+    ///
+    /// +-----------+--------------+----------------+-----+-------+-----------+
+    /// | type 类型 |   key size   |   value size   | key | value | CRC 校验值 |
+    /// +----------+--------------+----------------+-----+-------+-----------+
+    /// +  1 字节  + 变长（最大 5） +  变长（最大 5）  + 变长 +  变长  +  4 字节   +
+    pub fn encode(&self) -> Vec<u8> {
+        let (enc_buf, _) = self.encode_and_get_crc();
+        enc_buf
     }
 
-    pub fn get_crc(&mut self) -> u32 {
-        todo!()
+    pub fn get_crc(&self) -> u32 {
+        let (_, crc) = self.encode_and_get_crc();
+        crc
+    }
+
+    fn encode_and_get_crc(&self) -> (Vec<u8>, u32) {
+        // 初始化字节数组，存放编码数据
+        let mut buf = BytesMut::new();
+        buf.reserve(self.encoded_length());
+
+        // 第一个字节存放 type 类型
+        buf.put_u8(self.rec_type as u8);
+        // 再存储 key 和 value 的长度
+        encode_length_delimiter(self.key.len(), &mut buf).unwrap();
+        encode_length_delimiter(self.value.len(), &mut buf).unwrap();
+        // 存储 key 和 value
+        buf.extend_from_slice(&self.key);
+        buf.extend_from_slice(&self.value);
+
+        // 计算并存储 crc 校验值
+        let mut hasher = crc32fast::Hasher::new();
+        hasher.update(&buf);
+        let crc = hasher.finalize();
+        buf.put_u32(crc);
+
+        (buf.to_vec(), crc)
+    }
+
+    // LogRecord 编码后的长度
+    fn encoded_length(&self) -> usize {
+        std::mem::size_of::<u8>()
+            + length_delimiter_len(self.key.len())
+            + length_delimiter_len(self.value.len())
+            + self.key.len()
+            + self.value.len()
+            + CRC_LENGTH
     }
 }
 
 /// 获取 LogRecord header 部分的最大长度
 pub fn max_log_record_header_size() -> usize {
     std::mem::size_of::<u8>() + length_delimiter_len(std::u32::MAX as usize) * 2
+}
+
+#[cfg(test)]
+mod tests {
+    use std::default;
+
+    use super::*;
+
+    #[test]
+    fn test_log_record_encode() {
+        // 对正常的 LogRecord 编码
+        let rec1 = LogRecord {
+            key: "name".as_bytes().to_vec(),
+            value: "bitcask".as_bytes().to_vec(),
+            rec_type: LogRecordType::NORMAL,
+        };
+        let (enc1, crc) = rec1.encode_and_get_crc();
+        assert_eq!(crc, rec1.get_crc());
+        assert_eq!(enc1, rec1.encode());
+
+        // LogRecord 的 value 为空
+        let rec2 = LogRecord {
+            key: "name".as_bytes().to_vec(),
+            value: default::Default::default(),
+            rec_type: LogRecordType::NORMAL,
+        };
+        let (enc2, crc) = rec2.encode_and_get_crc();
+        assert_eq!(crc, rec2.get_crc());
+        assert_eq!(enc2, rec2.encode());
+
+        // 类型为 Deleted 的情况
+        let rec3 = LogRecord {
+            key: "name".as_bytes().to_vec(),
+            value: default::Default::default(),
+            rec_type: LogRecordType::DELETED,
+        };
+        let (enc3, crc) = rec3.encode_and_get_crc();
+        assert_eq!(crc, rec3.get_crc());
+        assert_eq!(enc3, rec3.encode());
+    }
 }
