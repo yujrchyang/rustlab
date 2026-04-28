@@ -2,6 +2,7 @@
 
 members = [
     "bitcask",
+    "cpeek",
 ]
 
 resolver = "2"
